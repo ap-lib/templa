@@ -199,3 +199,37 @@ $safe_output = $template->string($webhook_format);
 ```
 
 Now, user-supplied values cannot break the JSON structure.
+
+## Lazy loading macros
+
+If you need to fetch values from slow sources (like a database, Redis, API, or gRPC) you can define macros using a **lazy loader**. The macro will call a closure at render time, making it possible to defer expensive computations until they are actually needed.
+
+For example:
+
+```php
+$template = new TemplaEngine();
+
+// define a lazy-loaded macro
+$template->addMacros("hard", new LazyLoad(
+    function (?string $param, string $name, string $macro) {
+        // simulate a long operation
+        sleep(1);
+        return "takeLongTimeToGet";
+    },
+    "string"
+));
+
+// define a normal in-memory macro
+template->addMacros("easy", new Constant(
+    "dataAllowedOnMemory",
+    "string"
+));
+
+// rendering easy macro is fast
+$template->string('{ "result": "{{ easy }}" }');
+
+// rendering hard macro will execute the lazy closure at runtime
+$template->string('{ "result": "{{ hard }}" }');
+```
+
+**Use lazy macros** if values come from slow systems or expensive computations, and **use constants** if values are already in memory.

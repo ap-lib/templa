@@ -4,6 +4,7 @@ namespace AP\Templa\Tests;
 
 
 use AP\Templa\Macros\Constant;
+use AP\Templa\Macros\LazyLoad;
 use AP\Templa\Modifier\Base64;
 use AP\Templa\Modifier\JsonSubString;
 use AP\Templa\Modifier\ToLower;
@@ -199,5 +200,44 @@ class ReadmeTest extends TestCase
         );
     }
 
+    public function testLazyLoad()
+    {
+        $sleep = 1;
+
+        $template = new TemplaEngine();
+
+        // use lazy load if need to get data from database, redis, api, grpc, hard-calculate
+        $template->addMacros("hard", new LazyLoad(
+            function (?string $param, string $name, string $macro) use ($sleep) {
+                sleep($sleep);
+                return "takeLongTimeToGet";
+            },
+            "string"
+        ));
+
+        // use constants if data allowed in memory
+        $template->addMacros("easy", new Constant(
+            "dataAllowedOnMemory",
+            "string"
+        ));
+
+        // easy
+        $start = microtime(true);
+        $res = $template->string('{ "result": "{{ easy }}" }');
+        $this->assertEquals('{ "result": "dataAllowedOnMemory" }', $res);
+        $this->assertLessThan(
+            $sleep,
+            microtime(true) - $start
+        );
+
+        // hard
+        $start = microtime(true);
+        $res = $template->string('{ "result": "{{ hard }}" }');
+        $this->assertEquals('{ "result": "takeLongTimeToGet" }', $res);
+        $this->assertGreaterThan(
+            $sleep,
+            microtime(true) - $start
+        );
+    }
 
 }
