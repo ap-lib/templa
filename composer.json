@@ -1,6 +1,6 @@
 {
   "name": "ap-lib/templa",
-  "description": "AP\\Mysql is ...",
+  "description": "AP\\Templa is a lightweight, flexible PHP macro engine for safely injecting and transforming dynamic values inside arrays or strings, with built-in macro and modifier support.",
   "type": "library",
   "homepage": "https://github.com/ap-lib/templa",
   "license": "MIT",
