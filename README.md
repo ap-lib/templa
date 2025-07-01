@@ -194,7 +194,7 @@ $safe_output = $template->string($webhook_format);
 ```json
 {
   "price": "3.14",
-  "click_id": "e5a754f3-9a91-4273-b5c4-055c8bb244cc","price":100000,"hello":"world"
+  "click_id": "e5a754f3-9a91-4273-b5c4-055c8bb244cc\",\"price\":100000,\"hello\":\"world"
 }
 ```
 
