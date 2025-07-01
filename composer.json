@@ -1,0 +1,33 @@
+{
+  "name": "ap-lib/templa",
+  "description": "AP\\Mysql is ...",
+  "type": "library",
+  "homepage": "https://github.com/ap-lib/templa",
+  "license": "MIT",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "authors": [
+    {
+      "name": "Anton Panfilov"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "AP\\Templa\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "AP\\Templa\\Tests\\": "tests/"
+    }
+  },
+  "require": {
+    "php": "^8.3",
+    "ap-lib/error-node": "dev-main",
+    "ap-lib/logger": "dev-main",
+    "ext-mbstring": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "10.5.*"
+  }
+}
