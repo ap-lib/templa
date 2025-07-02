@@ -9,7 +9,10 @@ use AP\Templa\Doc\Doc;
 use AP\Templa\Doc\MacroDoc;
 use AP\Templa\Doc\MacroParam;
 use AP\Templa\Doc\ModifierDoc;
+use AP\Templa\Macros\Constant;
+use AP\Templa\Macros\LazyLoad;
 use AP\Templa\Macros\Nothing;
+use Closure;
 use RuntimeException;
 
 class TemplaEngine
@@ -39,6 +42,26 @@ class TemplaEngine
         }
         $this->macros[$name] = $macros;
         return $this;
+    }
+
+    public function addMacrosConstantOrLazyLoad(
+        string                                   $name,
+        Closure|string|array|int|float|bool|null $value,
+        string                                   $type,
+        string                                   $details = "",
+    ): static
+    {
+        return is_callable($value)
+            ? $this->addMacros($name, new LazyLoad(
+                $value,
+                $type,
+                $details,
+            ))
+            : $this->addMacros($name, new Constant(
+                $value,
+                $type,
+                $details,
+            ));
     }
 
     public function addModifier(string $name, ModifierInterface $modifier): static
