@@ -130,7 +130,7 @@ class TemplaEngine
      */
     private const string PATTERN = '\{\{\s*(\w+)(?:\s*:\s*([^}|]+))?(?:\s*\|\s*([^}]+))?\s*}}';
 
-    public function validateArray(array $array, array $required_macros = [], array $error_path = []): Valid|Errors
+    public function validateArray(array $array, array $required_macros = [], array $not_found_error_path = []): Valid|Errors
     {
         $errors            = [];
         $used_macros_names = [];
@@ -157,7 +157,7 @@ class TemplaEngine
         if (empty($errors) && !empty($required_macros)) {
             foreach ($required_macros as $required_macro) {
                 if (!key_exists($required_macro, $used_macros_names)) {
-                    return Errors::one("required macros: $required_macro not found", path: $error_path);
+                    return Errors::one("required macros: $required_macro not found", path: $not_found_error_path);
                 }
             }
         }
@@ -167,7 +167,7 @@ class TemplaEngine
             : new Errors($errors);
     }
 
-    public function validateString(string $string, array $required_macros = [], array $error_path = []): Valid|Errors
+    public function validateString(string $string, array $required_macros = [], array $not_found_error_path = []): Valid|Errors
     {
         $errors            = [];
         $used_macros_names = [];
@@ -190,7 +190,7 @@ class TemplaEngine
         if (empty($errors) && !empty($required_macros)) {
             foreach ($required_macros as $required_macro) {
                 if (!key_exists($required_macro, $used_macros_names)) {
-                    return Errors::one("required macros: $required_macro not found", path: $error_path);
+                    return Errors::one("required macros: $required_macro not found", path: $not_found_error_path);
                 }
             }
         }
