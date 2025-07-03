@@ -167,7 +167,7 @@ class TemplaEngine
             : new Errors($errors);
     }
 
-    public function validateString(string $string, array $required_macros = []): Valid|Errors
+    public function validateString(string $string, array $required_macros = [], array $error_path = []): Valid|Errors
     {
         $errors            = [];
         $used_macros_names = [];
@@ -190,7 +190,7 @@ class TemplaEngine
         if (empty($errors) && !empty($required_macros)) {
             foreach ($required_macros as $required_macro) {
                 if (!key_exists($required_macro, $used_macros_names)) {
-                    return Errors::one("required macro: $required_macro not found");
+                    return Errors::one("required macros: $required_macro not found", path: $error_path);
                 }
             }
         }
