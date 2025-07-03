@@ -130,7 +130,7 @@ class TemplaEngine
      */
     private const string PATTERN = '\{\{\s*(\w+)(?:\s*:\s*([^}|]+))?(?:\s*\|\s*([^}]+))?\s*}}';
 
-    public function validateArray(array $array, array $required_macros = []): Valid|Errors
+    public function validateArray(array $array, array $required_macros = [], array $error_path = []): Valid|Errors
     {
         $errors            = [];
         $used_macros_names = [];
@@ -157,7 +157,7 @@ class TemplaEngine
         if (empty($errors) && !empty($required_macros)) {
             foreach ($required_macros as $required_macro) {
                 if (!key_exists($required_macro, $used_macros_names)) {
-                    return Errors::one("required macros: $required_macro not found");
+                    return Errors::one("required macros: $required_macro not found", path: $error_path);
                 }
             }
         }
